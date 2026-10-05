@@ -28,33 +28,54 @@ export default function Login({ onLogin }) {
     }
   };
 
+  const switchMode = () => {
+    setError('');
+    setNotice('');
+    setMode(mode === 'login' ? 'register' : 'login');
+  };
+
   return (
-    <div className="card auth">
-      <h1>{mode === 'login' ? 'Login' : 'Create account'}</h1>
-      {error && <div className="alert error">{error}</div>}
-      {notice && <div className="alert success">{notice}</div>}
-
-      <form onSubmit={submit}>
-        <label>Username
-          <input value={form.username} onChange={set('username')} required autoFocus />
-        </label>
-        {mode === 'register' && (
-          <label>Email
-            <input type="email" value={form.email} onChange={set('email')} required />
-          </label>
-        )}
-        <label>Password
-          <input type="password" value={form.password} onChange={set('password')} required minLength={6} />
-        </label>
-        <button disabled={busy}>{busy ? 'Please wait…' : mode === 'login' ? 'Login' : 'Register'}</button>
-      </form>
-
-      <p className="muted">
-        {mode === 'login' ? 'No account yet? ' : 'Already registered? '}
-        <a href="#" onClick={(e) => { e.preventDefault(); setError(''); setMode(mode === 'login' ? 'register' : 'login'); }}>
-          {mode === 'login' ? 'Register' : 'Login'}
+    <main className="auth-layout">
+      <section className="auth-visual" aria-label="Stockroom warehouse">
+        <a className="brand-lockup" href="#" aria-label="Stockroom home">
+          <span className="brand-mark">s</span>
+          <span><strong>stockroom</strong><small>PRODUCT DESK</small></span>
         </a>
-      </p>
-    </div>
+        <div className="visual-caption">
+          <p>YOUR INVENTORY, IN FOCUS</p>
+          <h2>Good decisions start with a clear picture.</h2>
+          <span />
+        </div>
+      </section>
+
+      <section className="auth-panel">
+        <div className="auth-form-wrap">
+          <p className="auth-eyebrow">STOCKROOM / ACCOUNT</p>
+          <h1>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1>
+          <p className="auth-subtitle">{mode === 'login' ? 'Sign in to view and manage your product catalog.' : 'Register for a read-only product catalog account.'}</p>
+
+          {error && <div className="alert error" role="alert">{error}</div>}
+          {notice && <div className="alert success" role="status">{notice}</div>}
+
+          <form className="auth-form" onSubmit={submit}>
+            <label>Username
+              <input autoComplete="username" placeholder="Your username" value={form.username} onChange={set('username')} required autoFocus />
+            </label>
+            {mode === 'register' && (
+              <label>Email address
+                <input type="email" autoComplete="email" placeholder="you@example.com" value={form.email} onChange={set('email')} required />
+              </label>
+            )}
+            <label>Password
+              <input type="password" autoComplete={mode === 'login' ? 'current-password' : 'new-password'} placeholder="Enter your password" value={form.password} onChange={set('password')} required minLength={6} />
+            </label>
+            <button className="auth-submit" disabled={busy}><span aria-hidden="true">↗</span>{busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}</button>
+          </form>
+
+          <p className="auth-switch">{mode === 'login' ? 'No account yet? ' : 'Already registered? '}<button type="button" onClick={switchMode}>{mode === 'login' ? 'Register' : 'Sign in'}</button></p>
+          <p className="auth-foot">PRODUCT CATALOG <span aria-hidden="true">·</span> INVENTORY WORKSPACE</p>
+        </div>
+      </section>
+    </main>
   );
 }
